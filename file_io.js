@@ -1,33 +1,17 @@
 function writeStringToFile(filePath, content)
 {
-    try
-    {
-        const file = new File(filePath, 'w');
-        file.write(content);
+    const file = new File(filePath, 'w');
 
-        file.close();
-        console.log(`String written to file: ${filePath}`);
-    }
-    catch (error)
-    {
-        console.error(`Error writing to file: ${error}`);
-    }
+    file.write(content);
+    file.close();
 }
 
 function readStringFromFile(filePath)
 {
-    try
-    {
-        const file = new File(filePath, 'r');
-        const content = file.read();
+    const URI = Java.use("java.net.URI");
+    const Files = Java.use("java.nio.file.Files");
+    const Paths = Java.use("java.nio.file.Paths");
 
-        file.close();
-        console.log(`String read from file: ${filePath}`);
-
-        return content;
-    }
-    catch (error)
-    {
-        console.error(`Error reading from file: ${error}`);
-    }
+    const fileBytes = Files.readAllBytes(Paths.get(URI.create(`file://${filePath}`)));
+    return String.fromCharCode(...JSON.parse(JSON.stringify(fileBytes)));
 }
